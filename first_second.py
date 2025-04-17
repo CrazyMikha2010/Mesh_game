@@ -15,6 +15,8 @@ class First_Second:
         self.running = True
         self.status = False
         self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
+        self.grasshopper_x, self.grasshopper_y = 720, 540
+        self.up = True
 
     def first_second(self):
         background = pg.image.load(mainpath + "/menu/Menu.png")
@@ -23,7 +25,11 @@ class First_Second:
         grasshopper = pg.image.load(mainpath + "/images2/Grasshopper2.png").convert_alpha()
         grasshopper = pg.transform.scale(grasshopper, (130, 91))
 
-        scr.blit(grasshopper, (random.randint(720, 725), random.randint(540, 545)))
+        scr.blit(grasshopper, (self.grasshopper_x, self.grasshopper_y))
+        self.grasshopper_y += 0.3 if self.up else -0.3
+        if abs(540 - self.grasshopper_y) >= 5:
+            self.up = not self.up
+        self.grasshopper_x += 0.3 if not self.up else -0.3
 
         transparent_surface = pg.Surface((1080, 720), pg.SRCALPHA)
         transparent_surface.fill((0, 0, 0, 100))

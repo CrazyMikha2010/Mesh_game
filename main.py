@@ -19,11 +19,9 @@ scr = pg.display.set_mode((w, h))
 
 sound, music = True, True
 prev_music = True
-<<<<<<< HEAD
+
 my_song = pg.mixer.music.load(mainpath + "/sound/song.mp3")
-=======
-my_song = pg.mixer.music.load("Mezh_game/sound/song.mp3")
->>>>>>> 7fb4a4d6bfec5777df82f6071f127af457fd51eb
+
 pg.mixer.music.play(-1)
 classes = {1: Zero_First(), 2: First(), 3: First_Second(), 4: Second(), 5: Second_Third(), 6: Third(), 7: Third_Fourth(), 8: Fourth()}
 cur_class = 1

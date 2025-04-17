@@ -30,8 +30,6 @@ cur_class = 1
 running = True
 while running:
     if cur_class != 1:
-        if cur_class == 6:
-            pg.mouse.set_visible(False) # Hide cursor here
         running, status = classes[cur_class].f(sound)
     else:
         running, status, sound, music = classes[cur_class].f()

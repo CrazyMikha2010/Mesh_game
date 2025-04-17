@@ -1,0 +1,206 @@
+import pygame as pg
+import math
+import random
+from settings import *
+
+pg.init()
+pg.font.init()
+pg.display.set_caption('Mezhibovskiy project')
+clock = pg.time.Clock()
+FPS = 60
+w, h = 1080, 720
+scr = pg.display.set_mode((w, h))
+
+class Fourth:
+    def __init__(self):
+        self.grid = [
+        [5, 3, 8, 2, 9, 1, 4],
+        [6, 7, 2, 8, 3, 5, 6],
+        [1, 4, 9, 7, 2, 8, 3],
+        [3, 2, 6, 5, 7, 9, 1],
+        [8, 5, 3, 9, 6, 2, 7],
+        [4, 7, 1, 8, 4, 6, 5],
+        [2, 9, 4, 3, 8, 7, 6]
+    ]
+        self.running = True
+        self.x, self.y = 0, 0
+        self.color = [[False] * 7 for _ in range(7)]
+        self.color[0][0] = True
+        self.score = 5
+        self.end = False
+        self.rotation = 1440
+        self.spin = True
+        self.status = False
+        self.death = False
+        self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
+        self.click2 = pg.mixer.Sound(mainpath + "/sound/click2.wav")
+        self.wheel_sound = pg.mixer.Sound(mainpath + "/sound/fortune-wheel.mp3")
+        self.wheel_sound.set_volume(0.5)
+        self.auto = pg.mixer.Sound(mainpath + "/sound/aaaaaavtomobiiiil.mp3")
+        self.explosion = pg.mixer.Sound(mainpath + "/sound/explosion.mp3")
+
+    def turtle(self):
+        n, m = 7, 7
+        a = [
+        [5, 3, 8, 2, 9, 1, 4],
+        [6, 7, 2, 8, 3, 5, 6],
+        [1, 4, 9, 7, 2, 8, 3],
+        [3, 2, 6, 5, 7, 9, 1],
+        [8, 5, 3, 9, 6, 2, 7],
+        [4, 7, 1, 8, 4, 6, 5],
+        [2, 9, 4, 3, 8, 7, 6]
+    ]
+        for i in range(0, n):
+            for j in range(0, m):
+                if i and j:
+                    a[i][j] += min(a[i - 1][j], a[i][j - 1])
+                elif i:
+                    a[i][j] += a[i - 1][j]
+                elif j:
+                    a[i][j] += a[i][j - 1]
+
+        return a[-1][-1]
+
+    def draw_grid(self, x, y, color, score):
+        field = pg.image.load(mainpath + "/images4/4Field.png")
+        scr.blit(field, (0, 0))
+
+        transparent_surface = pg.Surface((700, 700), pg.SRCALPHA)
+        transparent_surface.fill((0, 0, 0, 200))
+        scr.blit(transparent_surface, (190, 10))
+
+        n, m = len(self.grid[0]), len(self.grid)
+        font_xxxl = pg.font.SysFont('Comic Sans MS', 70)
+        font_m = pg.font.SysFont('Comic Sans MS', 40)
+
+        for i in range(n):
+            for j in range(m):
+                font_color = "light green"
+                if self.color[i][j]:
+                    pg.draw.rect(scr, "light green", (190 + i * 100, 10 + j * 100, 100, 100))
+                    font_color = "black"
+                pg.draw.rect(scr, "black", (190 + i * 100, 10 + j * 100, 105, 105), 5)
+                value = font_xxxl.render(f'{self.grid[i][j]}', False, font_color)
+                scr.blit(value, (215 + 100 * i, 10 + j * 100))
+        score = font_m.render(f'Score:{score}', False, "black")
+        scr.blit(score, (0, 0))
+
+        grasshopper = pg.image.load(mainpath + "/images4/4Grasshopper.png").convert_alpha()
+        grasshopper = pg.transform.scale(grasshopper, (120, 80))
+        scr.blit(grasshopper, (x * 100 + 190, y * 100 + 20))
+
+        pg.display.flip()
+
+    def end_scr(self, scr, res):
+        minn = self.turtle()
+
+        transparent_surface = pg.Surface((1080, 720), pg.SRCALPHA)
+        transparent_surface.fill((0, 0, 0, 200))
+        scr.blit(transparent_surface, (0, 0))
+
+        percent = int(minn / res * 100)
+
+        pg.display.flip()
+        return percent
+
+
+    def wheel(self, percent, rotation, slots):
+        font_m = pg.font.SysFont('Comic Sans MS', 30)
+        living = font_m.render(f'Chance of living: {percent}%', False, "white")
+        scr.blit(living, (0, 40))
+
+        center = (w // 2, h // 2)
+        r = 350
+        divisions = 100
+        angle = 360 / divisions
+        for i in range(divisions):
+            start = math.radians(i * angle + rotation)
+            end = math.radians((i + 1) * angle + rotation)
+            color = "green" if slots[i] else "blue"
+            pg.draw.arc(scr, color, (center[0] - r, center[1] - r, r * 2, r * 2), start, end, r)
+
+        pg.draw.polygon(scr, "red", ((880, 360), (990, 300), (990, 420)))
+        life = font_m.render('Life', False, "white")
+        death = font_m.render('Death', False, "white")
+        pg.draw.rect(scr, "green", (10, 600, 100, 40))
+        scr.blit(life, (10, 600))
+        pg.draw.rect(scr, "blue", (10, 650, 100, 40))
+        scr.blit(death, (10, 650))
+
+        pg.display.flip()
+
+    def f(self, sound):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.running = False
+
+            elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                if self.death:
+                    if pg.Rect((840, 10, 200, 100)).collidepoint(event.pos):
+                        if sound: self.click.play()
+                        self.end = False
+                        self.x, self.y = 0, 0
+                        self.color = [[False] * 7 for _ in range(7)]
+                        self.color[0][0] = True
+                        self.rotation = 1440
+                        self.spin = True
+                        self.score = 5
+
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_DOWN and self.y < 6:
+                    if sound: self.click2.play()
+                    self.y += 1
+                    self.color[self.x][self.y] = True
+                    self.score += self.grid[self.x][self.y]
+                elif event.key == pg.K_RIGHT and self.x < 6:
+                    if sound: self.click2.play()
+                    self.x += 1
+                    self.color[self.x][self.y] = True
+                    self.score += self.grid[self.x][self.y]
+
+        if not self.end: 
+            scr.fill('white')
+            self.draw_grid(self.x, self.y, self.color, self.score)
+
+        if self.x == 6 and self.y == 6 and not self.end: # bottom right corner
+            self.end = True
+            self.percent = self.end_scr(scr, self.score)
+            self.slots = [True] * self.percent + [False] * (100 - self.percent)
+            random.shuffle(self.slots)
+        if self.end:
+            if self.spin: 
+                self.wheel(self.percent, self.rotation, self.slots)
+                if sound: self.wheel_sound.play()
+            if self.rotation > 0.9:
+                self.rotation *= 0.99
+            elif self.spin == True:
+                self.spin = False
+                col = scr.get_at((879, 360))
+                if sound: self.wheel_sound.stop()
+                if col[1] == 255:
+                    if sound: self.auto.play()
+                    self.death = False
+                    happy_end = pg.image.load(mainpath + "/menu/TheEnd.png")
+                    scr.blit(happy_end, (0, 0))
+                    pg.display.flip()
+                else:
+                    if sound: self.explosion.play()
+                    self.death = True
+                    explosion = pg.image.load(mainpath + "/images4/4Death.png")
+                    scr.blit(explosion, (0, 0))
+                    again = pg.image.load(mainpath + "/images/Again-transp-2.png").convert_alpha()
+                    again = pg.transform.scale(again, (200, 100))
+                    scr.blit(again, (840, 10))
+                    pg.display.flip()
+
+        return self.running, self.status
+
+
+if __name__ == "__main__":
+    running = True
+    fourth = Fourth()
+    while running:
+        running, status = fourth.f(True)
+        clock.tick(FPS)
+    
+

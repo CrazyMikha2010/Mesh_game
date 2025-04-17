@@ -1,0 +1,65 @@
+import pygame as pg
+import random
+from settings import *
+
+pg.init()
+pg.font.init()
+pg.display.set_caption('Mezhibovskiy project')
+clock = pg.time.Clock()
+FPS = 60
+w, h = 1080, 720
+scr = pg.display.set_mode((w, h))
+
+class First_Second:
+    def __init__(self):
+        self.running = True
+        self.status = False
+        self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
+
+    def first_second(self):
+        background = pg.image.load(mainpath + "/menu/Menu.png")
+        scr.blit(background, (0, 0))
+
+        grasshopper = pg.image.load(mainpath + "/images2/Grasshopper2.png").convert_alpha()
+        grasshopper = pg.transform.scale(grasshopper, (130, 91))
+
+        scr.blit(grasshopper, (random.randint(720, 725), random.randint(540, 545)))
+
+        transparent_surface = pg.Surface((1080, 720), pg.SRCALPHA)
+        transparent_surface.fill((0, 0, 0, 100))
+        scr.blit(transparent_surface, (0, 0))
+
+        font_m = pg.font.SysFont('Comic Sans MS', 30)
+
+        text_first_secont = 'Good job, now that our friend is ready, he needs to cross the river that’s cutting his peaceful meadows from harsh outer world. He’ll cross it by jumping from lily to lily. He can either jump on the next one or the one after next. Also he needs to collect as much lilies for his princess as possible. Navigate the grasshopper so he would complete his mission. '
+        tmp_first_second = ['Good job, now that our friend is ready, he needs to cross the river', ' that’s cutting his peaceful meadows from harsh outer world. He’ll', ' cross it by jumping from lily to lily. He can either jump on the next one', ' or the one after next. Also he needs to collect as much lilies for his', ' princess as possible. Navigate the grasshopper so he would complete', ' his mission. ']
+
+        for line in range(len(tmp_first_second)):
+            backstory_scr = font_m.render(tmp_first_second[line], False, "white")
+            scr.blit(backstory_scr, (10 if line > 0 else 40, 20 + 40 * line))
+
+        next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
+        next = pg.transform.scale(next, (200, 100))
+        scr.blit(next, (440, 500))
+
+        pg.display.flip()
+
+    def f(self, sound):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.running = False
+
+            if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                if pg.Rect(440, 500, 200, 100).collidepoint(event.pos): # second level
+                    if sound: self.click.play()
+                    self.status = True
+        self.first_second()
+
+        return self.running, self.status
+
+if __name__ == "__main__":
+    running = True
+    fs = First_Second()
+    while running:
+        running, status = fs.f(True)
+

@@ -18,6 +18,8 @@ class Zero_First:
         self.menu = True
         self.status = False
         self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
+        self.grasshopper_x, self.grasshopper_y = 540, 360
+        self.up = True
 
 
     def draw_menu(self, pos, MUSIK, SOUND):
@@ -31,7 +33,12 @@ class Zero_First:
         grasshopper = pg.image.load(mainpath + "/images2/Grasshopper2.png").convert_alpha()
         grasshopper = pg.transform.scale(grasshopper, (130, 91))
 
-        scr.blit(grasshopper, (random.randint(540, 545), random.randint(360, 365)))
+        
+        scr.blit(grasshopper, (self.grasshopper_x, self.grasshopper_y))
+        self.grasshopper_y += 0.3 if self.up else -0.3
+        if abs(360 - self.grasshopper_y) >= 5:
+            self.up = not self.up
+        self.grasshopper_x += 0.3 if not self.up else -0.3
         
         font_xxxl = pg.font.SysFont('Comic Sans MS', 70)
         play = font_xxxl.render('PLAY', False, "white")

@@ -22,12 +22,16 @@ prev_music = True
 
 my_song = pg.mixer.music.load(mainpath + "/sound/song.mp3")
 
+my_song = pg.mixer.music.load("Mezh_game/sound/song.mp3")
+
 pg.mixer.music.play(-1)
 classes = {1: Zero_First(), 2: First(), 3: First_Second(), 4: Second(), 5: Second_Third(), 6: Third(), 7: Third_Fourth(), 8: Fourth()}
 cur_class = 1
 running = True
 while running:
     if cur_class != 1:
+        if cur_class == 6:
+            pg.mouse.set_visible(False) # Hide cursor here
         running, status = classes[cur_class].f(sound)
     else:
         running, status, sound, music = classes[cur_class].f()

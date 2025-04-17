@@ -21,6 +21,8 @@ class First:
         self.rects, self.masks, self.coords = self.setup_objects(self.images)
         self.status = False
         self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
+        self.grasshopper_x, self.grasshopper_y = 0, 0
+        self.up = True
 
     def backpack(self):
         N, M = 5, 10
@@ -71,7 +73,11 @@ class First:
     def draw_screen(self, scr, images, rects, weightt, valuee, hover):
         scr.fill("#e7f8de")
         scr.blit(images["carpet"], (0, 0))
-        scr.blit(images["grasshopper"], (random.randint(-5, 5), random.randint(-5, 5)))
+        scr.blit(images["grasshopper"], (self.grasshopper_x, self.grasshopper_y))
+        self.grasshopper_y += 0.3 if self.up else -0.3
+        if abs(self.grasshopper_y) >= 5:
+            self.up = not self.up
+        self.grasshopper_x += 0.2 if not self.up else -0.2
         scr.blit(images["table"], (0, 0))
         scr.blit(images["plate"], (0, 0))
 

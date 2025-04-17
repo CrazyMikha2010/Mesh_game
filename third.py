@@ -60,7 +60,7 @@ class Third:
         pg.draw.rect(scr, background_color, (900, 5, 150, 70), border_radius=10)
         scr.blit(submit, (910, 10))
 
-        scr.blit(leg, (cursor_pos[0] - 500, cursor_pos[1]))
+        scr.blit(leg, (cursor_pos[0] - 560, cursor_pos[1] - 30))
         pg.display.flip()
         return table
     
@@ -92,6 +92,7 @@ class Third:
         return victory
     
     def f(self, sound):
+        if not self.end: pg.mouse.set_visible(False) # Hide cursor here
         for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
@@ -104,6 +105,7 @@ class Third:
                             self.color[(x - 40) // 100] = not self.color[(x - 40) // 100]
 
                         elif pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()): # submit button press
+                            pg.mouse.set_visible(True) # Reveal cursor here
                             if sound: self.click.play()
                             subseq = []
                             for i in range(10):
@@ -116,6 +118,7 @@ class Third:
                         if sound: self.click.play()
                         if not self.victory: # play again
                             self.end = False
+                            pg.mouse.set_visible(False) # Hide cursor here
                         else: # next level
                             self.status = True
 

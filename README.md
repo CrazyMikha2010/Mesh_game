@@ -16,11 +16,11 @@ P.S. All the painting in the game are handrown by me, hope you enjoy
 In order to install the game you first need to clone repository on your device
 
 ```bash
-git clone https://github.com/CrazyMikha2010/Mezh_game.git
+git clone https://github.com/CrazyMikha2010/Mesh_game.git
 ```
 Navigate to the project directory
 ```bash
-cd Mezh_game
+cd Mesh_game
 ```
 ### 2. Install required module
 

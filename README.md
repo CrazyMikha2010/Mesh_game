@@ -37,10 +37,5 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
-<<<<<<< HEAD
-![grasshopper image](images2/Grasshopper2.png)
-=======
-![grasshopper image](images2/Grasshopper2.png)
 
-
->>>>>>> 7fb4a4d6bfec5777df82f6071f127af457fd51eb
+![grasshopper image](images2/Grasshopper2.png)

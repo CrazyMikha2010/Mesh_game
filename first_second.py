@@ -26,12 +26,11 @@ class First_Second:
         scr.blit(transparent_surface, (0, 0))
 
 
-        text_first_secont = 'Good job, now that our friend is ready, he needs to cross the river that’s cutting his peaceful meadows from harsh outer world. He’ll cross it by jumping from lily to lily. He can either jump on the next one or the one after next. Also he needs to collect as much lilies for his princess as possible. Navigate the grasshopper so he would complete his mission. '
-        tmp_first_second = ['Good job, now that our friend is ready, he needs to cross the river', ' that’s cutting his peaceful meadows from harsh outer world. He’ll', ' cross it by jumping from lily to lily. He can either jump on the next one', ' or the one after next. Also he needs to collect as much lilies for his', ' princess as possible. Navigate the grasshopper so he would complete', ' his mission. ']
-
-        for line in range(len(tmp_first_second)):
-            backstory_scr = font_m.render(tmp_first_second[line], False, "white")
-            scr.blit(backstory_scr, (10 if line > 0 else 40, 20 + 40 * line))
+        text_first_second = 'Good job, now that our friend is ready, he needs to cross the river that’s cutting his peaceful meadows from harsh outer world. He’ll cross it by jumping from lily to lily. He can either jump on the next one or the one after next. Also he needs to collect as much lilies for his princess as possible. Navigate the grasshopper so he would complete his mission. '
+        lines_first_second = Text_Wrapper.text_wrapper(self, text_first_second, font_m, 1000)
+        for i in range(len(lines_first_second)):
+            backstory_scr = font_m.render(' '.join(lines_first_second[i]), False, "white")
+            scr.blit(backstory_scr, (30 if i > 0 else 60, 20 + 40 * i))
 
         next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
         next = pg.transform.scale(next, (200, 100))

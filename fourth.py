@@ -30,6 +30,7 @@ class Fourth:
         self.wheel_sound.set_volume(0.5)
         self.auto = pg.mixer.Sound(mainpath + "/sound/aaaaaavtomobiiiil.mp3")
         self.explosion = pg.mixer.Sound(mainpath + "/sound/explosion.mp3")
+        self.rects = [pg.Rect((190 + i * 100, 10 + j * 100, 100, 100)) for i in range(7) for j in range(7)]
 
     def turtle(self):
         n, m = len(self.grid), len(self.grid[0])
@@ -72,7 +73,7 @@ class Fourth:
 
         grasshopper = pg.image.load(mainpath + "/images4/4Grasshopper.png").convert_alpha()
         grasshopper = pg.transform.scale(grasshopper, (120, 80))
-        scr.blit(grasshopper, (x * 100 + 190, y * 100 + 20))
+        scr.blit(grasshopper, (self.x * 100 + 190, self.y * 100 + 20))
 
         pg.display.flip()
 
@@ -130,6 +131,17 @@ class Fourth:
                         self.rotation = 1440
                         self.spin = True
                         self.score = self.grid[0][0]
+                else:
+                    for rect in self.rects:
+                        if rect.collidepoint(event.pos):
+                            pressed_x, pressed_y = (event.pos[0] - 190) // 100, (event.pos[1] - 10) // 100
+                            if any(
+                                (all((pressed_x == self.x, pressed_y - self.y == 1)),
+                                all((pressed_y == self.y, pressed_x - self.x == 1)))
+                                ):
+                                self.x, self.y = pressed_x, pressed_y
+                                self.color[self.x][self.y] = True
+                                self.score += self.grid[self.x][self.y]
 
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_DOWN and self.y < 6:

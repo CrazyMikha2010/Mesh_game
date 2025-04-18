@@ -48,6 +48,7 @@ class Zero_First:
 
         pg.display.flip()
 
+
     def backstory_screen(self):
         background = pg.image.load(mainpath + "/menu/Menu.png")
         scr.blit(background, (0, 0))
@@ -61,19 +62,17 @@ class Zero_First:
         transparent_surface.fill((0, 0, 0, 100))
         scr.blit(transparent_surface, (0, 0))
 
-        # backstory = "Lonely grasshopper wandering around never-ending fields decides to look for the love of his life. He heard rumours surrounding young princess locked in a tower in desperate wait for brave knight to save her. "
-        # rules = "First, to prepare for his way, grasshopper wants to eat a champion breakfast. His belly fits only up to 10 grams. Help him get as much protein as possible, putting stuff he’ll eat in a plate. "
-        
-        tmp_backstory = ['Lonely grasshopper wandering around never-ending fields decides to', ' look for the love of his life. He heard rumours surrounding young princess', ' locked in a tower in desperate wait for brave knight to save her. ']
-        tmp_rules = ['First, to prepare for his way, grasshopper wants to eat a champion', ' breakfast. His belly fits only up to 10 grams. Help him get as much', ' protein as possible, dragging stuff he’ll eat in a plate. ']
-        
-        for line in range(len(tmp_backstory)):
-            backstory_scr = font_m.render(tmp_backstory[line], False, "white")
-            scr.blit(backstory_scr, (10 if line > 0 else 40, 20 + 40 * line))
+        backstory = "Lonely grasshopper wandering around never;ending fields decides to look for the love of his life. He heard rumours surrounding young princess locked in a tower in desperate wait for brave knight to save her. "
+        rules = "First, to prepare for his way, grasshopper wants to eat a champion breakfast. His belly fits only up to 10 grams. Help him get as much protein as possible, putting stuff he’ll eat in a plate. "
 
-        for line in range(len(tmp_rules)):
-            rules_scr = font_m.render(tmp_rules[line], False, "white")
-            scr.blit(rules_scr, (10 if line > 0 else 40, 220 + 40 * line))
+        backstory_lines = Text_Wrapper.text_wrapper(self, backstory, font_m, 1000)
+        for i in range(len(backstory_lines)):
+            backstory_scr = font_m.render(' '.join(backstory_lines[i]), False, "white")
+            scr.blit(backstory_scr, (30 if i > 0 else 60, 20 + 40 * i))
+        rules_lines = Text_Wrapper.text_wrapper(self, rules, font_m, 1000)
+        for i in range(len(rules_lines)):
+            rules_scr = font_m.render(' '.join(rules_lines[i]), False, "white")
+            scr.blit(rules_scr, (30 if i > 0 else 60, 220 + 40 * i))
 
         next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
         next = pg.transform.scale(next, (200, 100))
@@ -103,6 +102,7 @@ class Zero_First:
                 elif not self.menu and pg.Rect(440, 500, 200, 100).collidepoint(event.pos): # first level
                     self.status = True
                     if self.SOUND: self.click.play()
+        
         
         if self.menu: self.draw_menu(pg.mouse.get_pos(), self.MUSIC, self.SOUND)
         if not self.menu: self.backstory_screen()

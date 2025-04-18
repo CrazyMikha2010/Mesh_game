@@ -52,10 +52,10 @@ class Fourth:
                     pg.draw.rect(scr, "light green", (190 + i * 100, 10 + j * 100, 100, 100))
                     font_color = "black"
                 pg.draw.rect(scr, "black", (190 + i * 100, 10 + j * 100, 105, 105), 5)
-                value = font_xl.render(f'{self.grid[i][j]}', False, font_color)
+                value = font_xl_num.render(f'{self.grid[i][j]}', False, font_color)
                 x = 10 if len(str(value)) == 1 else -10
                 scr.blit(value, (215 + 100 * i + x, 10 + j * 100))
-        score = font_m.render(f'Score:{score}', False, "black")
+        score = font_m.render(f'Score:{score if score >= 0 else ';' + str(abs(score))}', False, "black")
         scr.blit(score, (0, 0))
 
         grasshopper = pg.image.load(mainpath + "/images4/4Grasshopper.png").convert_alpha()
@@ -78,8 +78,10 @@ class Fourth:
 
 
     def wheel(self, percent, rotation, slots):
-        living = font_m.render(f'Chance of living: {percent}%', False, "white")
-        scr.blit(living, (0, 40))
+        living1 = font_m.render('Chance of living:', False, "white")
+        living2 = font_m.render(f'{percent} percent', False, "white")
+        scr.blit(living1, (700, 0))
+        scr.blit(living2, (760, 40))
 
         center = (w // 2, h // 2)
         r = 350
@@ -125,6 +127,7 @@ class Fourth:
                                 (all((pressed_x == self.x, pressed_y - self.y == 1)),
                                 all((pressed_y == self.y, pressed_x - self.x == 1)))
                                 ):
+                                if sound: self.click2.play()
                                 self.x, self.y = pressed_x, pressed_y
                                 self.color[self.x][self.y] = True
                                 self.score += self.grid[self.x][self.y]

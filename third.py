@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+import time
 
 pg.init()
 pg.font.init()
@@ -61,7 +62,16 @@ class Third:
         scr.blit(submit, (910, 10))
 
         scr.blit(leg, (cursor_pos[0] - 560, cursor_pos[1] - 30))
+        subseq = []
+        for i in range(10):
+            if self.color[i]:
+                subseq.append(self.nums[i])
+        if sorted(subseq) != subseq and len(subseq) > 0:
+            font_m = pg.font.SysFont('Comic Sans MS', 40)
+            warning = font_m.render('Your subsequence is not increasing', False, (255, 0, 0))
+            scr.blit(warning, (200, 0))
         pg.display.flip()
+
         return table
     
     def end_scr(self, scr, res):

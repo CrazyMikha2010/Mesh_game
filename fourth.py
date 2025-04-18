@@ -1,15 +1,4 @@
-import pygame as pg
-import math
-import random
 from settings import *
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class Fourth:
     def __init__(self):
@@ -55,8 +44,6 @@ class Fourth:
         scr.blit(transparent_surface, (190, 10))
 
         n, m = len(self.grid[0]), len(self.grid)
-        font_xxxl = pg.font.SysFont('Comic Sans MS', 70)
-        font_m = pg.font.SysFont('Comic Sans MS', 40)
 
         for i in range(n):
             for j in range(m):
@@ -65,7 +52,7 @@ class Fourth:
                     pg.draw.rect(scr, "light green", (190 + i * 100, 10 + j * 100, 100, 100))
                     font_color = "black"
                 pg.draw.rect(scr, "black", (190 + i * 100, 10 + j * 100, 105, 105), 5)
-                value = font_xxxl.render(f'{self.grid[i][j]}', False, font_color)
+                value = font_xl.render(f'{self.grid[i][j]}', False, font_color)
                 x = 10 if len(str(value)) == 1 else -10
                 scr.blit(value, (215 + 100 * i + x, 10 + j * 100))
         score = font_m.render(f'Score:{score}', False, "black")
@@ -91,7 +78,6 @@ class Fourth:
 
 
     def wheel(self, percent, rotation, slots):
-        font_m = pg.font.SysFont('Comic Sans MS', 30)
         living = font_m.render(f'Chance of living: {percent}%', False, "white")
         scr.blit(living, (0, 40))
 

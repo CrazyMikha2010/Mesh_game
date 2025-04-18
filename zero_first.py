@@ -1,14 +1,4 @@
-import pygame as pg
-import random
 from settings import *
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class Zero_First:
     def __init__(self):
@@ -33,20 +23,16 @@ class Zero_First:
         grasshopper = pg.image.load(mainpath + "/images2/Grasshopper2.png").convert_alpha()
         grasshopper = pg.transform.scale(grasshopper, (130, 91))
 
-        
         scr.blit(grasshopper, (self.grasshopper_x, self.grasshopper_y))
         self.grasshopper_y += 0.3 if self.up else -0.3
         if abs(360 - self.grasshopper_y) >= 5:
             self.up = not self.up
         self.grasshopper_x += 0.3 if not self.up else -0.3
         
-        font_xxxl = pg.font.SysFont('Comic Sans MS', 70)
-        play = font_xxxl.render('PLAY', False, "white")
+        play = font_xl.render('PLAY', False, "white")
         x = 10 if pg.Rect(40, 200, 330, 100).collidepoint(pos) else 0
         pg.draw.rect(scr, "black", (40, 200, 330 + x, 100 + x))
         scr.blit(play, (50, 200))
-
-        font_m = pg.font.SysFont('Comic Sans MS', 40)
 
         x = 10 if pg.Rect(40, 330, 190, 60).collidepoint(pos) else 0
         color = "black" if MUSIK else "gray"
@@ -75,12 +61,11 @@ class Zero_First:
         transparent_surface.fill((0, 0, 0, 100))
         scr.blit(transparent_surface, (0, 0))
 
-        backstory = "Lonely grasshopper wandering around never-ending fields decides to look for the love of his life. He heard rumours surrounding young princess locked in a tower in desperate wait for brave knight to save her. "
-        rules = "First, to prepare for his way, grasshopper wants to eat a champion breakfast. His belly fits only up to 10 grams. Help him get as much protein as possible, putting stuff he’ll eat in a plate. "
+        # backstory = "Lonely grasshopper wandering around never-ending fields decides to look for the love of his life. He heard rumours surrounding young princess locked in a tower in desperate wait for brave knight to save her. "
+        # rules = "First, to prepare for his way, grasshopper wants to eat a champion breakfast. His belly fits only up to 10 grams. Help him get as much protein as possible, putting stuff he’ll eat in a plate. "
         
         tmp_backstory = ['Lonely grasshopper wandering around never-ending fields decides to', ' look for the love of his life. He heard rumours surrounding young princess', ' locked in a tower in desperate wait for brave knight to save her. ']
         tmp_rules = ['First, to prepare for his way, grasshopper wants to eat a champion', ' breakfast. His belly fits only up to 10 grams. Help him get as much', ' protein as possible, dragging stuff he’ll eat in a plate. ']
-        font_m = pg.font.SysFont('Comic Sans MS', 30)
         
         for line in range(len(tmp_backstory)):
             backstory_scr = font_m.render(tmp_backstory[line], False, "white")

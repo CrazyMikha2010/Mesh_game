@@ -96,9 +96,9 @@ class Fourth:
         pg.draw.polygon(scr, "red", ((880, 360), (990, 300), (990, 420)))
         life = font_m.render('Life', False, "white")
         death = font_m.render('Death', False, "white")
-        pg.draw.rect(scr, "green", (10, 600, 100, 40))
+        pg.draw.rect(scr, "green", (10, 600, 110, 40))
         scr.blit(life, (10, 600))
-        pg.draw.rect(scr, "blue", (10, 650, 100, 40))
+        pg.draw.rect(scr, "blue", (10, 650, 110, 40))
         scr.blit(death, (10, 650))
 
         pg.display.flip()

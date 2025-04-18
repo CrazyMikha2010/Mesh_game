@@ -13,15 +13,18 @@ class First:
         self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
         self.grasshopper_x, self.grasshopper_y = 0, 0
         self.up = True
+        self.m, self.c = [random.randint(1, 10) for _ in range(5)], [random.randint(1, 10) for _ in range(5)]
+        self.M = random.randint(10, 20)
+        self.stats = {"butterfly": [], "caterpillar": [], "drink": [], "flower": [], "leaf": []} # [weight, price]
+        for weight, price, name in zip(self.m, self.c, self.stats.keys()):
+            self.stats[name] = [weight, price]
 
     def backpack(self):
-        N, M = 5, 10
-        m = [2, 3, 6, 5, 4] 
-        c = [6, 8, 8, 15, 12]
-        dp = [0] * (M + 1)
+        N = 5
+        dp = [0] * (self.M + 1)
         for i in range(N):
-            weight, price = m[i], c[i]
-            for j in range(M, weight - 1, -1):
+            weight, price = self.m[i], self.c[i]
+            for j in range(self.M, weight - 1, -1):
                 if j >= weight:
                     dp[j] = max(dp[j], dp[j - weight] + price)
         return dp[-1]
@@ -71,11 +74,19 @@ class First:
         scr.blit(images["table"], (0, 0))
         scr.blit(images["plate"], (0, 0))
 
+        oranges = {"butterfly": [25, 35, 65, 30], "caterpillar": [40, 20, 40, 35], "drink": [105, 35, 60, 25], "flower": [10, 30, 60, 25], "leaf": [155, 125, 40, 35]}
         for name, rect in rects.items():
             scr.blit(images[name], rect.topleft)
+            orange = oranges[name]
+            pg.draw.rect(scr, "#DD7200", (rect.topleft[0] + orange[0], rect.topleft[1] + orange[1], orange[2], orange[3]))
+            weight = font_xs.render(f"{self.stats[name][0]}g", False, "black")
+            price = font_xs.render(f"{self.stats[name][1]}pr", False, "black")
+            scr.blit(weight, (rect.topleft[0] + orange[0], rect.topleft[1] + orange[1]))
+            scr.blit(price, (rect.topleft[0] + orange[0] + orange[2] // 2, rect.topleft[1] + orange[1] + orange[3] // 2))
 
 
-        capacity = font_s.render('Capacity: 10g', False, (0, 0, 0))
+
+        capacity = font_s.render(f'Capacity: {self.M}g', False, (0, 0, 0))
         weight = font_s.render(f'Weight: {weightt}g', False, (0, 0, 0))
         value = font_s.render(f'Value: {valuee}pr', False, (0, 0, 0))
 
@@ -84,14 +95,14 @@ class First:
         scr.blit(value, (0, 43))
         
         warning = font_m.render('Weight too big', False, (255, 0, 0))
-        if weightt > 10:
+        if weightt > self.M:
             scr.blit(warning, (400, 0))
 
         # submit button in top right corner
         x = 20 if hover else 0
         background_color = (127 - x, 127 - x, 127 - x)
         font_color = (0, 0, 0)
-        if weightt > 10:
+        if weightt > self.M:
             background_color = (255 - x, 0, 0)
             font_color = (255, 255, 255)
         elif weightt > 0:
@@ -106,15 +117,13 @@ class First:
     def check_collision(self, scr, images, masks, rects):
         plate_mask = pg.mask.from_surface(images["plate"])
         plate_rect = images["plate"].get_rect(topleft=(0, 0))
-
-        stats = {"butterfly": [2, 6], "caterpillar": [3, 8], "drink": [6, 8], "flower": [5, 15], "leaf": [4, 12]} # [weight, price]
         weight, value = 0, 0
         for name, mask, rect in zip(masks.keys(), masks.values(), rects.values()):
             tmp_offset_x = plate_rect.x - rect.x
             tmp_offset_y = plate_rect.y - rect.y
             if mask.overlap(plate_mask, (tmp_offset_x, tmp_offset_y)):
-                weight += stats[name][0]
-                value += stats[name][1]
+                weight += self.stats[name][0]
+                value += self.stats[name][1]
         return weight, value
 
     def end_scr(self, scr):
@@ -152,7 +161,7 @@ class First:
                 if pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()) and not self.end: # submit button press
                     weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
                     if sound: self.click.play()
-                    if 0 < weight <= 10:
+                    if 0 < weight <= self.M:
                         self.end = True
                         self.victory = self.end_scr(scr)
                 

@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+import random
 
 pg.init()
 pg.font.init()
@@ -11,9 +12,10 @@ scr = pg.display.set_mode((w, h))
 
 class Second:
     def __init__(self):
-        self.cnt = 3
         self.cur = 0
-        self.masks, self.rects, self.lillys, self.coords1, self.grasshopper = self.draw_screen(self.cnt, self.cur)
+        self.lillys = [0] + [random.randint(-9, 9) for _ in range(8)] + [0]
+        self.cnt = 0
+        self.masks, self.rects, self.coords1, self.grasshopper = self.draw_screen(self.cnt, self.cur, self.lillys)
         self.running = True
         self.end = False
         self.status = False
@@ -22,7 +24,7 @@ class Second:
         self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
         
 
-    def draw_screen(self, cnt, cur):
+    def draw_screen(self, cnt, cur, lillys):
         pond = pg.image.load(mainpath + "/images2/2Pond.png")
         grasshopper = pg.image.load(mainpath + "/images2/Grasshopper2.png").convert_alpha()
         grasshopper = pg.transform.scale(grasshopper, (130, 91))
@@ -33,36 +35,35 @@ class Second:
         coords1 = [(-10, 200), (94, 364), (242, 253), (347, 379), (462, 220), (543, 373), (682, 227), (733, 458), (883, 290), (926, 486)]
         coords2 = [(84, 347), (215, 346), (352, 368), (452, 347), (545, 358), (672, 347), (752, 410), (852, 412), (944, 447), (950, 1000)]
         coords3 = [(66, 312), (104, 381), (184, 373), (239, 328), (326, 349), (367, 393), (431, 382), (471, 319), (531, 327), (561, 382), (642, 379), (691, 322), (739, 354), (758, 454), (827, 458), (874, 377), (936, 400), (959, 483), (950, 1000), (950, 1000)]
-        lillys = [3, -5, 2, 7, -4, 6, -1, 8, -3, 5]
         self.masks = {}
         self.rects = {}
         font_m = pg.font.SysFont('Comic Sans MS', 40)
         score = font_m.render(f'Lillys count:{cnt}', False, "white")
         scr.blit(score, (0, 0))
         
-        for i in range(10):
+        for i in range(len(lillys)):
             pg.draw.circle(scr, "#7CFC00", coords2[i], 20)
             pg.draw.circle(scr, "#2E8B57", coords3[i * 2], 10)
             pg.draw.circle(scr, "dark green", coords3[i * 2 + 1], 7)
             scr.blit(lillypad, coords1[i])
 
-            y = -50 if i % 2 == 0 else 100
-            x = 20
-            cnt = font_m.render(f'x{lillys[i]}', False, "black")
-            scr.blit(cnt, (coords1[i][0] + x, coords1[i][1] + y))
-
             mask = pg.mask.from_surface(lillypad)
             rect = grasshopper.get_rect(topleft=coords1[i])
             self.masks[i] = mask
             self.rects[i] = rect
+        
+        for i in range(1, len(self.lillys) - 1):
+            y = -50 if i % 2 == 0 else 100
+            x = 20
+            cnt = font_m.render(f'x{self.lillys[i]}', False, "black")
+            scr.blit(cnt, (coords1[i][0] + x, coords1[i][1] + y))
         scr.blit(grasshopper, coords1[cur])
         pg.display.flip()
 
-        return self.masks, self.rects, lillys, coords1, grasshopper
+        return self.masks, self.rects, coords1, grasshopper
 
-    def grasshopper_k(self):
-        n = 10
-        nums = [3, -5, 2, 7, -4, 6, -1, 8, -3, 5]
+    def grasshopper_k(self, nums):
+        n = len(nums)
         dp = [0] * n
         dp[0], dp[1] = nums[0], nums[1]
         for i in range(2, n):
@@ -71,7 +72,7 @@ class Second:
 
 
     def end_scr(self, scr, res):
-        score = self.grasshopper_k()
+        score = self.grasshopper_k(self.lillys) + self.lillys[0]
         if score == res:
             self.victory = True
         else: 
@@ -117,7 +118,7 @@ class Second:
                         if sound: self.click.play()
                         self.end = False
                         self.cur = 0
-                        self.cnt = 3
+                        self.cnt = 0
                     else: # next level
                         if sound: self.click.play()
                         self.status = True
@@ -126,7 +127,7 @@ class Second:
             self.victory = self.end_scr(scr, self.cnt)
             self.cur = 0
 
-        if not self.end: self.draw_screen(self.cnt, self.cur)
+        if not self.end: self.draw_screen(self.cnt, self.cur, self.lillys)
 
         return self.running, self.status
 

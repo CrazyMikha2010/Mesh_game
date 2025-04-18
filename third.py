@@ -1,15 +1,4 @@
-import pygame as pg
 from settings import *
-import time
-import random
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class Third:
     def __init__(self):
@@ -39,14 +28,13 @@ class Third:
     def draw_grid(self, color, hover, cursor_pos):
         table_structure = pg.image.load(mainpath + "/images3/3Table_structure.png")
         leg = pg.image.load(mainpath + "/images3/3Leg.png")
-        font_xxxl = pg.font.SysFont('Comic Sans MS', 70)
 
         scr.blit(table_structure, (0, 0))
         pg.draw.rect(scr, (219, 177, 138), (40, 310, 1000, 100))
         for i in range(len(self.nums)):
             if color[i]: pg.draw.rect(scr, "light green", (i * 100 + 40, 310, 105, 100))
             pg.draw.rect(scr, "black", (i * 100 + 40, 310, 105, 100), 5)
-            value = font_xxxl.render(f'{self.nums[i]}', False, "black")
+            value = font_xl.render(f'{self.nums[i]}', False, "black")
             coords = (i * 100 + 55, 307) if len(str(self.nums[i])) == 2 else (i * 100 + 70, 307)
             scr.blit(value, coords)
 
@@ -55,8 +43,7 @@ class Third:
         background_color = (219 - x, 177 - x, 138 - x)
         font_color = (0, 0, 0)
         
-        font_m = pg.font.SysFont('Comic Sans MS', 40)
-        submit = font_m.render('submit', False, font_color)
+        submit = font_l.render('submit', False, font_color)
         pg.draw.rect(scr, background_color, (900, 5, 150, 70), border_radius=10)
         scr.blit(submit, (910, 10))
 
@@ -66,7 +53,6 @@ class Third:
             if self.color[i]:
                 subseq.append(self.nums[i])
         if sorted(subseq) != subseq and len(subseq) > 0:
-            font_m = pg.font.SysFont('Comic Sans MS', 40)
             warning = font_m.render('Your subsequence is not increasing', False, (255, 0, 0))
             scr.blit(warning, (200, 0))
         pg.display.flip()

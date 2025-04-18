@@ -1,14 +1,4 @@
-import pygame as pg
-import random
 from settings import *
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class Second_Third:
     def __init__(self):
@@ -35,9 +25,8 @@ class Second_Third:
         transparent_surface.fill((0, 0, 0, 100))
         scr.blit(transparent_surface, (0, 0))
 
-        font_m = pg.font.SysFont('Comic Sans MS', 30)
 
-        text_second_third = 'Yay! Now he has got a gift for his loved one. All that’s left is to get over the hill. Before last hike grasshopper decided to stop at tavern. The owner there loves gambling, and he suggested a game: he’ll put 10 numbers in any order he wants, and your goal is to highlight the longest increasing subsequence. If your subsequence will be shorter that his, than you have to buy another drink, otherwise he’ll do you a favour and drive you across the hill. '
+        # text_second_third = 'Yay! Now he has got a gift for his loved one. All that’s left is to get over the hill. Before last hike grasshopper decided to stop at tavern. The owner there loves gambling, and he suggested a game: he’ll put 10 numbers in any order he wants, and your goal is to highlight the longest increasing subsequence. If your subsequence will be shorter that his, than you have to buy another drink, otherwise he’ll do you a favour and drive you across the hill. '
         tmp_second_third = ['Yay! Now he has got a gift for his loved one. All that’s left is to get', ' over the hill. Before last hike grasshopper decided to stop at tavern.', ' The owner there loves gambling, and he suggested a game:', ' he’ll put 10 numbers in any order he wants, and your goal is to highlight', ' the longest increasing subsequence. If your subsequence will be', ' shorter that his, than you have to buy another drink, otherwise', ' he’ll do you a favour and drive you across the hill.']
 
         for line in range(len(tmp_second_third)):

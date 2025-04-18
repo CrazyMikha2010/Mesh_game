@@ -1,19 +1,9 @@
-import pygame as pg
 from settings import *
-import random
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class Second:
     def __init__(self):
         self.cur = 0
-        self.lillys = [0] + [random.randint(-9, 9) for _ in range(8)] + [0]
+        self.lillys = [0] + [random.randint(-5, 9) for _ in range(8)] + [0]
         self.cnt = 0
         self.masks, self.rects, self.coords1, self.grasshopper = self.draw_screen(self.cnt, self.cur, self.lillys)
         self.running = True
@@ -37,7 +27,6 @@ class Second:
         coords3 = [(66, 312), (104, 381), (184, 373), (239, 328), (326, 349), (367, 393), (431, 382), (471, 319), (531, 327), (561, 382), (642, 379), (691, 322), (739, 354), (758, 454), (827, 458), (874, 377), (936, 400), (959, 483), (950, 1000), (950, 1000)]
         self.masks = {}
         self.rects = {}
-        font_m = pg.font.SysFont('Comic Sans MS', 40)
         score = font_m.render(f'Lillys count:{cnt}', False, "white")
         scr.blit(score, (0, 0))
         
@@ -55,7 +44,7 @@ class Second:
         for i in range(1, len(self.lillys) - 1):
             y = -50 if i % 2 == 0 else 100
             x = 20
-            cnt = font_m.render(f'x{self.lillys[i]}', False, "black")
+            cnt = font_l.render(f'x{self.lillys[i]}', False, "black")
             scr.blit(cnt, (coords1[i][0] + x, coords1[i][1] + y))
         scr.blit(grasshopper, coords1[cur])
         pg.display.flip()

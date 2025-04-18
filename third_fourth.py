@@ -1,14 +1,4 @@
-import pygame as pg
-import random
 from settings import *
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class Third_Fourth:
     def __init__(self):
@@ -34,9 +24,7 @@ class Third_Fourth:
         transparent_surface.fill((0, 0, 0, 100))
         scr.blit(transparent_surface, (0, 0))
 
-        font_m = pg.font.SysFont('Comic Sans MS', 30)
-
-        text_third_fourth = 'Now that you’re finally standing next to her tower, you, as every other knight, have to make a brave act: field in front of tower is full of mines. From the top-left corner you can go down or right (using arrow keys). Your goal is to choose the path to the bottom-right corner such that the amount of mines you stepped on is the smallest. After crossing it, fortune will decide whether you’ll get to meet princess, or blow up as other contenders.'
+        # text_third_fourth = 'Now that you’re finally standing next to her tower, you, as every other knight, have to make a brave act: field in front of tower is full of mines. From the top-left corner you can go down or right (using arrow keys). Your goal is to choose the path to the bottom-right corner such that the amount of mines you stepped on is the smallest. After crossing it, fortune will decide whether you’ll get to meet princess, or blow up as other contenders.'
         tmp_third_fourth = ['Now that you’re finally standing next to her tower, you, as every', ' other knight, have to make a brave act: field in front of', ' tower is full of mines. From the top-left corner you can go', ' down or right (using arrow keys). Your goal is to choose the', ' path to the bottom-right corner such that the amount of mines you', ' stepped on is the smallest. After crossing it, fortune will decide whether', ' you’ll get to meet princess, or blow up as other contenders.']
 
         for line in range(len(tmp_third_fourth)):

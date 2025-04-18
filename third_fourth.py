@@ -24,12 +24,11 @@ class Third_Fourth:
         transparent_surface.fill((0, 0, 0, 100))
         scr.blit(transparent_surface, (0, 0))
 
-        # text_third_fourth = 'Now that you’re finally standing next to her tower, you, as every other knight, have to make a brave act: field in front of tower is full of mines. From the top-left corner you can go down or right (using arrow keys). Your goal is to choose the path to the bottom-right corner such that the amount of mines you stepped on is the smallest. After crossing it, fortune will decide whether you’ll get to meet princess, or blow up as other contenders.'
-        tmp_third_fourth = ['Now that you’re finally standing next to her tower, you, as every', ' other knight, have to make a brave act: field in front of', ' tower is full of mines. From the top-left corner you can go', ' down or right (using arrow keys). Your goal is to choose the', ' path to the bottom-right corner such that the amount of mines you', ' stepped on is the smallest. After crossing it, fortune will decide whether', ' you’ll get to meet princess, or blow up as other contenders.']
-
-        for line in range(len(tmp_third_fourth)):
-            backstory_scr = font_m.render(tmp_third_fourth[line], False, "white")
-            scr.blit(backstory_scr, (10 if line > 0 else 40, 20 + 40 * line))
+        text_third_fourth = 'Now that you’re finally standing next to her tower, you, as every other knight, have to make a brave act: field in front of tower is full of mines. From the top;left corner you can go down or right. Your goal is to choose the path to the bottom;right corner such that the amount of mines you stepped on is the smallest. After crossing it, fortune will decide whether you’ll get to meet princess, or blow up as other contenders.'
+        lines_third_fourth = Text_Wrapper.text_wrapper(self, text_third_fourth, font_m, 1000)
+        for i in range(len(lines_third_fourth)):
+            backstory_scr = font_m.render(' '.join(lines_third_fourth[i]), False, "white")
+            scr.blit(backstory_scr, (30 if i > 0 else 60, 20 + 40 * i))
 
         next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
         next = pg.transform.scale(next, (200, 100))

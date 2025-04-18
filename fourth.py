@@ -13,20 +13,12 @@ scr = pg.display.set_mode((w, h))
 
 class Fourth:
     def __init__(self):
-        self.grid = [
-        [5, 3, 8, 2, 9, 1, 4],
-        [6, 7, 2, 8, 3, 5, 6],
-        [1, 4, 9, 7, 2, 8, 3],
-        [3, 2, 6, 5, 7, 9, 1],
-        [8, 5, 3, 9, 6, 2, 7],
-        [4, 7, 1, 8, 4, 6, 5],
-        [2, 9, 4, 3, 8, 7, 6]
-    ]
+        self.grid = [[random.randint(-5, 20) for _ in range(7)] for __ in range(7)]
         self.running = True
         self.x, self.y = 0, 0
         self.color = [[False] * 7 for _ in range(7)]
         self.color[0][0] = True
-        self.score = 5
+        self.score = self.grid[0][0]
         self.end = False
         self.rotation = 1440
         self.spin = True
@@ -40,16 +32,8 @@ class Fourth:
         self.explosion = pg.mixer.Sound(mainpath + "/sound/explosion.mp3")
 
     def turtle(self):
-        n, m = 7, 7
-        a = [
-        [5, 3, 8, 2, 9, 1, 4],
-        [6, 7, 2, 8, 3, 5, 6],
-        [1, 4, 9, 7, 2, 8, 3],
-        [3, 2, 6, 5, 7, 9, 1],
-        [8, 5, 3, 9, 6, 2, 7],
-        [4, 7, 1, 8, 4, 6, 5],
-        [2, 9, 4, 3, 8, 7, 6]
-    ]
+        n, m = len(self.grid), len(self.grid[0])
+        a = [row.copy() for row in self.grid]
         for i in range(0, n):
             for j in range(0, m):
                 if i and j:
@@ -81,7 +65,8 @@ class Fourth:
                     font_color = "black"
                 pg.draw.rect(scr, "black", (190 + i * 100, 10 + j * 100, 105, 105), 5)
                 value = font_xxxl.render(f'{self.grid[i][j]}', False, font_color)
-                scr.blit(value, (215 + 100 * i, 10 + j * 100))
+                x = 10 if len(str(value)) == 1 else -10
+                scr.blit(value, (215 + 100 * i + x, 10 + j * 100))
         score = font_m.render(f'Score:{score}', False, "black")
         scr.blit(score, (0, 0))
 
@@ -144,7 +129,7 @@ class Fourth:
                         self.color[0][0] = True
                         self.rotation = 1440
                         self.spin = True
-                        self.score = 5
+                        self.score = self.grid[0][0]
 
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_DOWN and self.y < 6:

@@ -34,7 +34,7 @@ class Third:
         for i in range(len(self.nums)):
             if color[i]: pg.draw.rect(scr, "light green", (i * 100 + 40, 310, 105, 100))
             pg.draw.rect(scr, "black", (i * 100 + 40, 310, 105, 100), 5)
-            value = font_xl.render(f'{self.nums[i]}', False, "black")
+            value = font_xl_num.render(f'{self.nums[i]}', False, "black")
             coords = (i * 100 + 55, 307) if len(str(self.nums[i])) == 2 else (i * 100 + 70, 307)
             scr.blit(value, coords)
 

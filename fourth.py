@@ -35,7 +35,7 @@ class Fourth:
 
         return a[-1][-1]
 
-    def draw_grid(self, x, y, color, score):
+    def draw_grid(self, score):
         field = pg.image.load(mainpath + "/images4/4Field.png")
         scr.blit(field, (0, 0))
 
@@ -143,7 +143,7 @@ class Fourth:
 
         if not self.end: 
             scr.fill('white')
-            self.draw_grid(self.x, self.y, self.color, self.score)
+            self.draw_grid(self.score)
 
         if self.x == 6 and self.y == 6 and not self.end: # bottom right corner
             self.end = True

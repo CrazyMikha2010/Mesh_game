@@ -3,7 +3,7 @@ from settings import *
 class Second:
     def __init__(self):
         self.cur = 0
-        self.lillys = [0] + [random.randint(-5, 9) for _ in range(8)] + [0]
+        self.lillys = [0] + [random.randint(-9, 10) for _ in range(8)] + [0]
         self.cnt = 0
         self.masks, self.rects, self.coords1, self.grasshopper = self.draw_screen(self.cnt, self.cur, self.lillys)
         self.running = True
@@ -27,7 +27,7 @@ class Second:
         coords3 = [(66, 312), (104, 381), (184, 373), (239, 328), (326, 349), (367, 393), (431, 382), (471, 319), (531, 327), (561, 382), (642, 379), (691, 322), (739, 354), (758, 454), (827, 458), (874, 377), (936, 400), (959, 483), (950, 1000), (950, 1000)]
         self.masks = {}
         self.rects = {}
-        score = font_m.render(f'Lillys count:{cnt}', False, "white")
+        score = font_m.render(f'Lillys count:{cnt if cnt >= 0 else ';' + str(abs(cnt))}', False, "white")
         scr.blit(score, (0, 0))
         
         for i in range(len(lillys)):
@@ -44,7 +44,8 @@ class Second:
         for i in range(1, len(self.lillys) - 1):
             y = -50 if i % 2 == 0 else 100
             x = 20
-            cnt = font_l.render(f'x{self.lillys[i]}', False, "black")
+            cur_lily = self.lillys[i]
+            cnt = font_l.render(f'x{cur_lily if cur_lily >= 0 else ';' + str(abs(cur_lily))}', False, "black")
             scr.blit(cnt, (coords1[i][0] + x, coords1[i][1] + y))
         scr.blit(grasshopper, coords1[cur])
         pg.display.flip()

@@ -1,14 +1,4 @@
-import pygame as pg
-import random
 from settings import *
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class First:
     def __init__(self):
@@ -84,8 +74,7 @@ class First:
         for name, rect in rects.items():
             scr.blit(images[name], rect.topleft)
 
-        font_s = pg.font.SysFont('Comic Sans MS', 20)
-        font_m = pg.font.SysFont('Comic Sans MS', 40)
+
         capacity = font_s.render('Capacity: 10g', False, (0, 0, 0))
         weight = font_s.render(f'Weight: {weightt}g', False, (0, 0, 0))
         value = font_s.render(f'Value: {valuee}pr', False, (0, 0, 0))
@@ -109,7 +98,7 @@ class First:
             background_color = (0, 255 - x, 0)
             font_color = (255, 255, 255)
 
-        submit = font_m.render('submit', False, font_color)
+        submit = font_l.render('submit', False, font_color)
         pg.draw.rect(scr, background_color, (900, 5, 150, 70), border_radius=10)
         scr.blit(submit, (910, 10))
         pg.display.flip()

@@ -26,12 +26,11 @@ class Second_Third:
         scr.blit(transparent_surface, (0, 0))
 
 
-        # text_second_third = 'Yay! Now he has got a gift for his loved one. All that’s left is to get over the hill. Before last hike grasshopper decided to stop at tavern. The owner there loves gambling, and he suggested a game: he’ll put 10 numbers in any order he wants, and your goal is to highlight the longest increasing subsequence. If your subsequence will be shorter that his, than you have to buy another drink, otherwise he’ll do you a favour and drive you across the hill. '
-        tmp_second_third = ['Yay! Now he has got a gift for his loved one. All that’s left is to get', ' over the hill. Before last hike grasshopper decided to stop at tavern.', ' The owner there loves gambling, and he suggested a game:', ' he’ll put 10 numbers in any order he wants, and your goal is to highlight', ' the longest increasing subsequence. If your subsequence will be', ' shorter that his, than you have to buy another drink, otherwise', ' he’ll do you a favour and drive you across the hill.']
-
-        for line in range(len(tmp_second_third)):
-            backstory_scr = font_m.render(tmp_second_third[line], False, "white")
-            scr.blit(backstory_scr, (10 if line > 0 else 40, 20 + 40 * line))
+        text_second_third = 'Yay! Now he has got a gift for his loved one. All that’s left is to get over the hill. Before last hike grasshopper decided to stop at tavern. The owner there loves gambling, and he suggested a game: he’ll put 10 numbers in any order he wants, and your goal is to highlight the longest increasing subsequence. If your subsequence will be shorter that his, than you have to buy another drink, otherwise he’ll do you a favour and drive you across the hill. '
+        lines_second_third = Text_Wrapper.text_wrapper(self, text_second_third, font_m, 1000)
+        for i in range(len(lines_second_third)):
+            backstory_scr = font_m.render(' '.join(lines_second_third[i]), False, "white")
+            scr.blit(backstory_scr, (30 if i > 0 else 60, 20 + 40 * i))
 
         next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
         next = pg.transform.scale(next, (200, 100))

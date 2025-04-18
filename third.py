@@ -1,6 +1,7 @@
 import pygame as pg
 from settings import *
 import time
+import random
 
 pg.init()
 pg.font.init()
@@ -15,15 +16,14 @@ class Third:
         self.running = True
         self.color = [False] * 10
         self.end = False
-        self.nums = [3, 4, -1, 0, 6, 2, 3, 8, 9, 5]
+        self.nums = [random.randint(-9, 99) for _ in range(10)]
         self.status = False
         self.click = pg.mixer.Sound(mainpath + "/sound/click.wav")
         self.click2 = pg.mixer.Sound(mainpath + "/sound/click2.wav")
         
 
     def LIS(self):
-        n = 10
-        self.nums = [3, 4, -1, 0, 6, 2, 3, 8, 9, 5]
+        n = len(self.nums)
         help = [0] * n
         for i in range(n):
             cur_num = self.nums[i]
@@ -39,16 +39,15 @@ class Third:
     def draw_grid(self, color, hover, cursor_pos):
         table_structure = pg.image.load(mainpath + "/images3/3Table_structure.png")
         leg = pg.image.load(mainpath + "/images3/3Leg.png")
-        table = [3, 4, -1, 0, 6, 2, 3, 8, 9, 5]
         font_xxxl = pg.font.SysFont('Comic Sans MS', 70)
 
         scr.blit(table_structure, (0, 0))
         pg.draw.rect(scr, (219, 177, 138), (40, 310, 1000, 100))
-        for i in range(len(table)):
+        for i in range(len(self.nums)):
             if color[i]: pg.draw.rect(scr, "light green", (i * 100 + 40, 310, 105, 100))
             pg.draw.rect(scr, "black", (i * 100 + 40, 310, 105, 100), 5)
-            value = font_xxxl.render(f'{table[i]}', False, "black")
-            coords = (i * 100 + 60, 307) if len(str(table[i])) == 2 else (i * 100 + 70, 307)
+            value = font_xxxl.render(f'{self.nums[i]}', False, "black")
+            coords = (i * 100 + 55, 307) if len(str(self.nums[i])) == 2 else (i * 100 + 70, 307)
             scr.blit(value, coords)
 
 
@@ -72,7 +71,7 @@ class Third:
             scr.blit(warning, (200, 0))
         pg.display.flip()
 
-        return table
+        return self.nums
     
     def end_scr(self, scr, res):
         lis = self.LIS()

@@ -18,6 +18,7 @@ font_xl_num = pg.font.SysFont("Comic Sans", 70)
 font_xl = pg.font.Font(font_path, 140)
 font_l = pg.font.Font(font_path, 80)
 font_s = pg.font.Font(font_path, 40)
+font_xs = pg.font.Font(font_path, 20)
 
 class Text_Wrapper:
     def __init__(self):

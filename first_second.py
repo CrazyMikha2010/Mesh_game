@@ -1,14 +1,4 @@
-import pygame as pg
-import random
 from settings import *
-
-pg.init()
-pg.font.init()
-pg.display.set_caption('Mezhibovskiy project')
-clock = pg.time.Clock()
-FPS = 60
-w, h = 1080, 720
-scr = pg.display.set_mode((w, h))
 
 class First_Second:
     def __init__(self):
@@ -35,7 +25,6 @@ class First_Second:
         transparent_surface.fill((0, 0, 0, 100))
         scr.blit(transparent_surface, (0, 0))
 
-        font_m = pg.font.SysFont('Comic Sans MS', 30)
 
         text_first_secont = 'Good job, now that our friend is ready, he needs to cross the river that’s cutting his peaceful meadows from harsh outer world. He’ll cross it by jumping from lily to lily. He can either jump on the next one or the one after next. Also he needs to collect as much lilies for his princess as possible. Navigate the grasshopper so he would complete his mission. '
         tmp_first_second = ['Good job, now that our friend is ready, he needs to cross the river', ' that’s cutting his peaceful meadows from harsh outer world. He’ll', ' cross it by jumping from lily to lily. He can either jump on the next one', ' or the one after next. Also he needs to collect as much lilies for his', ' princess as possible. Navigate the grasshopper so he would complete', ' his mission. ']

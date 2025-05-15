@@ -126,7 +126,7 @@ class First:
                 value += self.stats[name][1]
         return weight, value
 
-    def end_scr(self, scr):
+    def end_scr(self, scr, stat):
         weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
         if self.backpack() == value:
             self.victory = True
@@ -136,7 +136,7 @@ class First:
         transparent_surface.fill((0, 0, 0, 128))
         scr.blit(transparent_surface, (0, 0))
 
-        if self.victory:
+        if self.victory or stat=='win':
             good_boy = pg.image.load(mainpath + "/images/1Goodboy.png").convert_alpha()
             next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
             next = pg.transform.scale(next, (200, 100))
@@ -157,13 +157,24 @@ class First:
             if event.type == pg.QUIT:
                 self.running = False
 
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_l:
+                    self.end_scr(scr, None)
+                    self.end = True
+                    print('lose')
+                elif event.key == pg.K_w:
+                    self.victory = self.end_scr(scr, 'win')
+                    self.victory = True
+                    self.end = True
+                    print('win')
+
             elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
                 if pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()) and not self.end: # submit button press
                     weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
                     if sound: self.click.play()
                     if 0 < weight <= self.M:
                         self.end = True
-                        self.victory = self.end_scr(scr)
+                        self.victory = self.end_scr(scr, None)
                 
                 elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(pg.mouse.get_pos()): # next / again button
                     if sound: self.click.play()

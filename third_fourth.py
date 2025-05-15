@@ -33,8 +33,14 @@ class Third_Fourth:
         next = pg.image.load(mainpath + "/images/Next-transp-2.png").convert_alpha()
         next = pg.transform.scale(next, (200, 100))
         scr.blit(next, (440, 500))
+        self.rot -= 10
 
         pg.display.flip()
+
+    def handle_mosePress(self, event_pos, sound):
+        if pg.Rect(440, 500, 200, 100).collidepoint(event_pos): # fourth level
+            if sound: self.click.play()
+            self.status = True
 
     def f(self, sound):
         for event in pg.event.get():
@@ -42,12 +48,9 @@ class Third_Fourth:
                 self.running = False
 
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                if pg.Rect(440, 500, 200, 100).collidepoint(event.pos): # fourth level
-                    if sound: self.click.play()
-                    self.status = True
+                self.handle_mosePress(event.pos, sound)
 
         self.third_fourth(self.rot)
-        self.rot -= 10
 
         return self.running, self.status
 

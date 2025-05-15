@@ -152,58 +152,69 @@ class First:
 
         return self.victory
     
+    def handle_keydown(self, event_key):
+        if event_key == pg.K_l:
+            self.end_scr(scr, None)
+            self.end = True
+            print('lose')
+        elif event_key == pg.K_w:
+            self.victory = self.end_scr(scr, 'win')
+            self.victory = True
+            self.end = True
+            print('win')
+
+    def handle_mousepress(self, event_pos, sound):
+        if pg.Rect((900, 10, 150, 70)).collidepoint(event_pos) and not self.end: # submit button press
+            weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
+            if sound: self.click.play()
+            if 0 < weight <= self.M:
+                self.end = True
+                self.victory = self.end_scr(scr, None)
+        
+        elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(pg.mouse.get_pos()): # next / again button
+            if sound: self.click.play()
+            if not self.victory: # play again
+                self.end = False
+            else: # next level
+                self.status = True
+            
+        else:
+            for name, rect in self.rects.items():
+                if rect.collidepoint(event_pos):
+                    self.offset_x_mouse = event_pos[0] - rect.x
+                    self.offset_y_mouse = event_pos[1] - rect.y
+                    if self.masks[name].get_at((self.offset_x_mouse, self.offset_y_mouse)):
+                        if sound: self.click.play()
+                        self.dragging = name
+                        self.offset_x, self.offset_y = self.offset_x_mouse, self.offset_y_mouse
+                        break
+
+    def handle_mouseMotion(self, event_pos):
+        if self.dragging:
+            self.rects[self.dragging].topleft = (event_pos[0] - self.offset_x,  event_pos[1] - self.offset_y)
+        
+    def draw_screen_main(self):
+        weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
+        if not self.end: self.draw_screen(scr, self.images, self.rects, weight, value, pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()))
+    
     def f(self, sound):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
 
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_l:
-                    self.end_scr(scr, None)
-                    self.end = True
-                    print('lose')
-                elif event.key == pg.K_w:
-                    self.victory = self.end_scr(scr, 'win')
-                    self.victory = True
-                    self.end = True
-                    print('win')
+            if event.type == pg.KEYDOWN: # press to skip level
+                self.handle_keydown(event.key)
 
             elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                if pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()) and not self.end: # submit button press
-                    weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
-                    if sound: self.click.play()
-                    if 0 < weight <= self.M:
-                        self.end = True
-                        self.victory = self.end_scr(scr, None)
-                
-                elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(pg.mouse.get_pos()): # next / again button
-                    if sound: self.click.play()
-                    if not self.victory: # play again
-                        self.end = False
-                    else: # next level
-                        self.status = True
-                    
-                else:
-                    for name, rect in self.rects.items():
-                        if rect.collidepoint(event.pos):
-                            self.offset_x_mouse = event.pos[0] - rect.x
-                            self.offset_y_mouse = event.pos[1] - rect.y
-                            if self.masks[name].get_at((self.offset_x_mouse, self.offset_y_mouse)):
-                                if sound: self.click.play()
-                                self.dragging = name
-                                self.offset_x, self.offset_y = self.offset_x_mouse, self.offset_y_mouse
-                                break
+                self.handle_mousepress(event.pos, sound)
             
             elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
                 self.dragging = None
 
             elif event.type == pg.MOUSEMOTION:
-                if self.dragging:
-                    self.rects[self.dragging].topleft = (event.pos[0] - self.offset_x,  event.pos[1] - self.offset_y)
+                self.handle_mouseMotion(event.pos)
 
-        weight, value = self.check_collision(scr, self.images, self.masks, self.rects)
-        if not self.end: self.draw_screen(scr, self.images, self.rects, weight, value, pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()))
-
+        self.draw_screen_main()
         return self.running, self.status
     
 

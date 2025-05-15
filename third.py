@@ -25,7 +25,8 @@ class Third:
             help[i] = max_len + 1
         return max(help)
 
-    def draw_grid(self, color, hover, cursor_pos):
+    def draw_grid(self, color, cursor_pos):
+        hover = pg.Rect((900, 10, 150, 70)).collidepoint(cursor_pos)
         table_structure = pg.image.load(mainpath + "/images3/3Table_structure.png")
         leg = pg.image.load(mainpath + "/images3/3Leg.png")
 
@@ -86,6 +87,32 @@ class Third:
 
         return victory
     
+    def handle_mousePress(self, event_pos, sound):
+        if not self.end:
+            x, y = pg.mouse.get_pos()
+            if 310 <= y <= 410 and 40 <= x <= 1040:
+                if sound: self.click2.play()
+                self.color[(x - 40) // 100] = not self.color[(x - 40) // 100]
+
+            elif pg.Rect((900, 10, 150, 70)).collidepoint(event_pos): # submit button press
+                pg.mouse.set_visible(True) # Reveal cursor here
+                if sound: self.click.play()
+                subseq = []
+                for i in range(10):
+                    if self.color[i]:
+                        subseq.append(self.nums[i])
+                if sorted(subseq) == subseq and len(subseq) > 0:
+                    self.end = True
+                    self.victory = self.end_scr(scr, len(subseq))
+        elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(event_pos): # next / again button
+            if sound: self.click.play()
+            if not self.victory: # play again
+                self.end = False
+                pg.mouse.set_visible(False) # Hide cursor here
+            else: # next level
+                self.status = True
+
+    
     def f(self, sound):
         if not self.end: pg.mouse.set_visible(False) # Hide cursor here
         for event in pg.event.get():
@@ -93,31 +120,9 @@ class Third:
                     self.running = False
 
                 elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                    if not self.end:
-                        x, y = pg.mouse.get_pos()
-                        if 310 <= y <= 410 and 40 <= x <= 1040:
-                            if sound: self.click2.play()
-                            self.color[(x - 40) // 100] = not self.color[(x - 40) // 100]
+                    self.handle_mousePress(event.pos, sound)
 
-                        elif pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()): # submit button press
-                            pg.mouse.set_visible(True) # Reveal cursor here
-                            if sound: self.click.play()
-                            subseq = []
-                            for i in range(10):
-                                if self.color[i]:
-                                    subseq.append(self.nums[i])
-                            if sorted(subseq) == subseq and len(subseq) > 0:
-                                self.end = True
-                                self.victory = self.end_scr(scr, len(subseq))
-                    elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(pg.mouse.get_pos()): # next / again button
-                        if sound: self.click.play()
-                        if not self.victory: # play again
-                            self.end = False
-                            pg.mouse.set_visible(False) # Hide cursor here
-                        else: # next level
-                            self.status = True
-
-        if not self.end: nums = self.draw_grid(self.color, pg.Rect((900, 10, 150, 70)).collidepoint(pg.mouse.get_pos()), pg.mouse.get_pos())
+        if not self.end: self.draw_grid(self.color, pg.mouse.get_pos())
         return self.running, self.status
 
 if __name__ == "__main__":

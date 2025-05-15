@@ -87,7 +87,7 @@ class Second:
 
         return self.victory
     
-    def handle_mousepress(self, event_pos, sound):
+    def handle_mousePress(self, event_pos, sound):
         if not self.end:
             for i in range(self.cur + 1, self.cur + 3):
                 if i < 10 and self.rects[i].collidepoint(event_pos):
@@ -122,7 +122,7 @@ class Second:
                 self.running = False
 
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                self.handle_mousepress(event.pos, sound)
+                self.handle_mousePress(event.pos, sound)
         
         self.draw_screen_main()
         return self.running, self.status

@@ -87,38 +87,44 @@ class Second:
 
         return self.victory
     
-    def f(self, sound):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.running = False
+    def handle_mousepress(self, event_pos, sound):
+        if not self.end:
+            for i in range(self.cur + 1, self.cur + 3):
+                if i < 10 and self.rects[i].collidepoint(event_pos):
+                    self.offset_x_mouse = event_pos[0] - self.rects[i].x
+                    self.offset_y_mouse = event_pos[1] - self.rects[i].y
+                    if self.masks[i].get_at((self.offset_x_mouse, self.offset_y_mouse)):
+                        scr.blit(self.grasshopper, self.coords1[i])
+                        self.cnt += self.lillys[i]
+                        self.cur = i
+                        if sound: self.jump.play()
+        elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(pg.mouse.get_pos()): # next / again button
+            if not self.victory: # play again
+                if sound: self.click.play()
+                self.end = False
+                self.cur = 0
+                self.cnt = 0
+            else: # next level
+                if sound: self.click.play()
+                self.status = True
 
-            if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                if not self.end:
-                    for i in range(self.cur + 1, self.cur + 3):
-                        if i < 10 and self.rects[i].collidepoint(event.pos):
-                            self.offset_x_mouse = event.pos[0] - self.rects[i].x
-                            self.offset_y_mouse = event.pos[1] - self.rects[i].y
-                            if self.masks[i].get_at((self.offset_x_mouse, self.offset_y_mouse)):
-                                scr.blit(self.grasshopper, self.coords1[i])
-                                self.cnt += self.lillys[i]
-                                self.cur = i
-                                if sound: self.jump.play()
-                elif self.end and pg.Rect((440, 500, 200, 100)).collidepoint(pg.mouse.get_pos()): # next / again button
-                    if not self.victory: # play again
-                        if sound: self.click.play()
-                        self.end = False
-                        self.cur = 0
-                        self.cnt = 0
-                    else: # next level
-                        if sound: self.click.play()
-                        self.status = True
+    def draw_screen_main(self):
         if self.cur == 9:
             self.end = True
             self.victory = self.end_scr(scr, self.cnt)
             self.cur = 0
 
         if not self.end: self.draw_screen(self.cnt, self.cur, self.lillys)
+    
+    def f(self, sound):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.running = False
 
+            if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                self.handle_mousepress(event.pos, sound)
+        
+        self.draw_screen_main()
         return self.running, self.status
 
 if __name__ == "__main__":

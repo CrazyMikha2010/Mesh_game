@@ -38,15 +38,18 @@ class First_Second:
 
         pg.display.flip()
 
+    def handle_mousepress(self, event_pos, sound):
+        if pg.Rect(440, 500, 200, 100).collidepoint(event_pos): # second level
+            if sound: self.click.play()
+            self.status = True
+
     def f(self, sound):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
 
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                if pg.Rect(440, 500, 200, 100).collidepoint(event.pos): # second level
-                    if sound: self.click.play()
-                    self.status = True
+                self.handle_mousepress(event.pos, sound)
         self.first_second()
 
         return self.running, self.status

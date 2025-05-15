@@ -80,33 +80,41 @@ class Zero_First:
         
         pg.display.flip()
 
+    def handle_event(self, event_pos):
+        if pg.Rect(40, 200, 330, 100).collidepoint(event_pos): # play
+            self.backstory_screen()
+            self.menu = False
+            if self.SOUND: self.click.play()
+
+        elif pg.Rect(40, 330, 190, 60).collidepoint(event_pos): # musik
+            self.MUSIC = not self.MUSIC
+            if self.SOUND: self.click.play()
+
+        elif pg.Rect(40, 410, 190, 60).collidepoint(event_pos): # sound
+            self.SOUND = not self.SOUND
+            if self.SOUND: self.click.play()
+
+        elif not self.menu and pg.Rect(440, 500, 200, 100).collidepoint(event_pos): # first level
+            self.status = True
+            if self.SOUND: self.click.play()
+
+    def draw_screen(self):
+        if self.menu: self.draw_menu(pg.mouse.get_pos(), self.MUSIC, self.SOUND)
+        if not self.menu: self.backstory_screen()
+
+
     def f(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
 
             elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                if pg.Rect(40, 200, 330, 100).collidepoint(event.pos): # play
-                    self.backstory_screen()
-                    self.menu = False
-                    if self.SOUND: self.click.play()
+                self.handle_event(event.pos)
 
-                elif pg.Rect(40, 330, 190, 60).collidepoint(event.pos): # musik
-                    self.MUSIC = not self.MUSIC
-                    if self.SOUND: self.click.play()
-
-                elif pg.Rect(40, 410, 190, 60).collidepoint(event.pos): # sound
-                    self.SOUND = not self.SOUND
-                    if self.SOUND: self.click.play()
-
-                elif not self.menu and pg.Rect(440, 500, 200, 100).collidepoint(event.pos): # first level
-                    self.status = True
-                    if self.SOUND: self.click.play()
-        
-        
-        if self.menu: self.draw_menu(pg.mouse.get_pos(), self.MUSIC, self.SOUND)
-        if not self.menu: self.backstory_screen()
+        self.draw_screen()
         return self.running, self.status, self.SOUND, self.MUSIC
+        
+        
 
 if __name__ == "__main__":
     running = True

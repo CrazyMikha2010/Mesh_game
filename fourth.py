@@ -103,47 +103,43 @@ class Fourth:
 
         pg.display.flip()
 
-    def f(self, sound):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.running = False
+    def handle_mousePress(self, event_pos, sound):
+        if self.death:
+            if pg.Rect((840, 10, 200, 100)).collidepoint(event_pos):
+                if sound: self.click.play()
+                self.end = False
+                self.x, self.y = 0, 0
+                self.color = [[False] * 7 for _ in range(7)]
+                self.color[0][0] = True
+                self.rotation = 1440
+                self.spin = True
+                self.score = self.grid[0][0]
+        else:
+            for rect in self.rects:
+                if rect.collidepoint(event_pos):
+                    pressed_x, pressed_y = (event_pos[0] - 190) // 100, (event_pos[1] - 10) // 100
+                    if any(
+                        (all((pressed_x == self.x, pressed_y - self.y == 1)),
+                        all((pressed_y == self.y, pressed_x - self.x == 1)))
+                        ):
+                        if sound: self.click2.play()
+                        self.x, self.y = pressed_x, pressed_y
+                        self.color[self.x][self.y] = True
+                        self.score += self.grid[self.x][self.y]
+                        
+    def handle_keyDown(self, event_key, sound):
+        if event_key == pg.K_DOWN and self.y < 6:
+            if sound: self.click2.play()
+            self.y += 1
+            self.color[self.x][self.y] = True
+            self.score += self.grid[self.x][self.y]
+        elif event_key == pg.K_RIGHT and self.x < 6:
+            if sound: self.click2.play()
+            self.x += 1
+            self.color[self.x][self.y] = True
+            self.score += self.grid[self.x][self.y]
 
-            elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                if self.death:
-                    if pg.Rect((840, 10, 200, 100)).collidepoint(event.pos):
-                        if sound: self.click.play()
-                        self.end = False
-                        self.x, self.y = 0, 0
-                        self.color = [[False] * 7 for _ in range(7)]
-                        self.color[0][0] = True
-                        self.rotation = 1440
-                        self.spin = True
-                        self.score = self.grid[0][0]
-                else:
-                    for rect in self.rects:
-                        if rect.collidepoint(event.pos):
-                            pressed_x, pressed_y = (event.pos[0] - 190) // 100, (event.pos[1] - 10) // 100
-                            if any(
-                                (all((pressed_x == self.x, pressed_y - self.y == 1)),
-                                all((pressed_y == self.y, pressed_x - self.x == 1)))
-                                ):
-                                if sound: self.click2.play()
-                                self.x, self.y = pressed_x, pressed_y
-                                self.color[self.x][self.y] = True
-                                self.score += self.grid[self.x][self.y]
-
-            elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_DOWN and self.y < 6:
-                    if sound: self.click2.play()
-                    self.y += 1
-                    self.color[self.x][self.y] = True
-                    self.score += self.grid[self.x][self.y]
-                elif event.key == pg.K_RIGHT and self.x < 6:
-                    if sound: self.click2.play()
-                    self.x += 1
-                    self.color[self.x][self.y] = True
-                    self.score += self.grid[self.x][self.y]
-
+    def draw_screen_main(self, sound):
         if not self.end: 
             scr.fill('white')
             self.draw_grid(self.score)
@@ -179,6 +175,18 @@ class Fourth:
                     scr.blit(again, (840, 10))
                     pg.display.flip()
 
+    def f(self, sound):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.running = False
+
+            elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                self.handle_mousePress(event.pos, sound)
+
+            elif event.type == pg.KEYDOWN:
+                self.handle_keyDown(event.key, sound)
+
+        self.draw_screen_main(sound)
         return self.running, self.status
 
 

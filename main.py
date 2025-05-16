@@ -19,16 +19,16 @@ cur_class = 1
 running = True
 while running:
     if cur_class != 1:
-        running, status = classes[cur_class].f(sound)
+        running, won_level = classes[cur_class].f(sound)
     else:
-        running, status, sound, music = classes[cur_class].f()
+        running, won_level, sound, music = classes[cur_class].f()
         if not music:
             pg.mixer.music.stop()
         if music and not prev_music:
             pg.mixer.music.play(-1)
             prev_music = True
         prev_music = music
-    if status:
+    if won_level:
         cur_class = cur_class + 1 if cur_class < 9 else 1
 
     clock.tick(FPS)

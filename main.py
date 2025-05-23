@@ -1,5 +1,5 @@
 from zero_first import Zero_First
-from skibidi import First
+from first_game import First
 from first_second import First_Second
 from second import Second
 from second_third import Second_Third

@@ -6,7 +6,7 @@ The plot is that the grasshopper goes on a mission to find the love of his life.
 
 For a brief overview of problems in my game visit [this](https://docs.google.com/presentation/d/1Fmm4OBNpHow2gk-wG77zo8FB7XMN9OG9PN6I8MEUdvM/edit?usp=sharing) google slide
 
-P.S. All the painting in the game are handrown by me, hope you enjoy
+P.S. All the painting in the game as well as fonts are handrown by me, hope you enjoy
 
 
 ## Installation
